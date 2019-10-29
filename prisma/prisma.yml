@@ -1,0 +1,2 @@
+endpoint: http://localhost:5000/demo/prod
+datamodel: datamodel.graphql

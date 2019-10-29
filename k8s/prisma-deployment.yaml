@@ -1,0 +1,39 @@
+apiVersion: "apps/v1"
+kind: Deployment
+metadata:
+  name: prisma
+  namespace: prisma
+  labels:
+    component: prisma
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      component: prisma
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        component: prisma
+    spec:
+      containers:
+        - name: prisma
+          image: prismagraphql/prisma:1.34
+          imagePullPolicy: Always
+          resources:
+            requests:
+              cpu: "500m"
+              memory: "500Mi"
+            limits:
+              cpu: "800m"
+              memory: "800Mi"
+          ports:
+          - containerPort: 4466
+            protocol: TCP
+          env:
+            - name: PRISMA_CONFIG
+              valueFrom:
+                configMapKeyRef:
+                  name: prisma-configmap
+                  key: PRISMA_CONFIG

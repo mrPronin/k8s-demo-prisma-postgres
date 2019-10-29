@@ -1,0 +1,21 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: prisma-configmap
+  namespace: prisma
+  labels:
+    component: prisma
+data:
+  PRISMA_CONFIG: |
+    port: 4466
+    databases:
+      default:
+        connector: postgres
+        host: postgres
+        database: demo
+        user: prisma
+        ssl: false
+        password: prisma
+        rawAccess: true
+        port: '5432'
+        migrations: true

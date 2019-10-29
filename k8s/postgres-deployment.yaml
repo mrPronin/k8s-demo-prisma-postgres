@@ -1,0 +1,39 @@
+apiVersion: "apps/v1"
+kind: Deployment
+metadata:
+  name: postgres
+  namespace: prisma
+  labels:
+    component: "db"
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      component: "db"
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        component: "db"
+    spec:
+      volumes:
+        - name: postgres-pvc
+          persistentVolumeClaim:
+            claimName: postgres-pvc
+      containers:
+        - name: postgres
+          image: postgres:11
+          resources: {}
+          ports:
+            - containerPort: 5432
+          volumeMounts:
+            - name: postgres-pvc
+              mountPath: /var/lib/postgresql/data
+              subPath: postgres
+          env:
+            - name: POSTGRES_PASSWORD
+              value: prisma
+            - name: POSTGRES_USER
+              value: prisma
+      restartPolicy: Always
